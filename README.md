@@ -16,6 +16,9 @@ CORRECT PATH = "*"
 
 # Start
 
+git clone https://github.com/7heDimas/maze-gen.git
+cd maze-gen
+
 # from the root of the project
 
 python main.py
@@ -43,6 +46,22 @@ python main.py
 python main.py --rows 21 --cols 31  
 python main.py --loops 15 --seed 1  
 python main.py --treasure off       
+
+# Start macOS
+
+python3 --version
+Python 3.10+
+
+git clone https://github.com/7heDimas/maze-gen.git
+cd maze-gen
+
+# Virtual environment
+
+python3 -m venv .venv
+source .venv/bin/activate
+
+# from the root of the project
+python3 main.py
 
 # Algorithms for creating a maze
 Chamber grid (odd dimensions). 
