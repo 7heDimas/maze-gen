@@ -17,6 +17,7 @@ CORRECT PATH = "*"
 # Start
 
 git clone https://github.com/7heDimas/maze-gen.git
+
 cd maze-gen
 
 # from the root of the project
