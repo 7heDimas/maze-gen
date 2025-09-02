@@ -1,10 +1,10 @@
 # Console Maze Generator (Python)
 
-Генератор 2D-лабіринтів для консолі з підтримкою пасток `T`, опційного скарбу `$`, 
-гарантованим хоча б одним **безпечним** шляхом від входу `E` до виходу `X`, 
-і можливістю створювати кілька маршрутів (`--loops`).
+A 2D maze generator for consoles with support for traps `T`, optional treasure `$`, 
+at least one **safe** path from the entrance `E` to the exit `X`, 
+and the ability to create multiple routes (`--loops`).
 
-# Символи клітинок
+# Cell symbols
 
 WALL = "#"
 ROAD = "."
@@ -14,65 +14,54 @@ ENTER = "E"
 EXIT = "X"
 CORRECT PATH = "*"
 
-# Приклад виводу
+# Start
 
-#####E#########
-#T.$#*#***#...#
-#.###*#*#*#.#.#
-#***#***#*****#
-#*#*#########*#
-#*#*#.......#*#
-#*#*#.#.#####*#
-#*#***********#
-#X#############
-
-# Запуск
-
-# з кореня проєкту
+# from the root of the project
 
 python main.py
 
-# відтворюваний результат
+# reproducible result
 python main.py --rows 10 --cols 15 --seed 123
 
-# кілька маршрутів (прибрати ~15% внутрішніх стін)
+# several routes (remove ~15% of interior walls)
 python main.py --rows 21 --cols 31 --loops 15
 
-# Параметри CLI
+# CLI parameters
 
-- `--rows N` — рядки сітки (≥3).  
-- `--cols M` — колонки сітки (≥3).  
-- `--seed S` — фіксувати випадковість (ідентичний результат).  
-- `--no-path` — не малювати шлях `*`.  
-- `--loops PERCENT` — прибрати % внутрішніх стін (0 = один шлях, >0 = кілька).  
-- `--treasure {auto,on,off}` — скарб: авто / завжди / ніколи.  
-- `--treasure-prob P` — ймовірність скарбу в режимі `auto` (0..1).  
-- `--max-traps K` — максимум пасток (0..5, `-1` = авто за площею).  
+- `--rows N` — grid rows (≥3).
+- `--cols M` — grid columns (≥3).
+- `--seed S` — fix randomness (identical result).
+- `--no-path` — do not draw the path `*`.  
+- `--loops PERCENT` — remove % of internal walls (0 = one path, >0 = multiple).  
+- `--treasure {auto,on,off}` — treasure: auto / always / never.  
+- `--treasure-prob P` — treasure probability in `auto` mode (0..1).  
+- `--max-traps K` — maximum traps (0..5, `-1` = auto by area).
 
-# Приклади
-python main.py                      # стандартний запуск
-python main.py --rows 21 --cols 31  # розмір
-python main.py --loops 15 --seed 1  # кілька маршрутів + відтворюваність
-python main.py --treasure off       # без скарбу
 
-# Алгоритми створення лабіринту
- Камерна решітка (непарні розміри). 
- Прохідні “камери” на непарних індексах, стіни - між ними. Полегшує пробивання стін.
+# Examples
+python main.py                      
+python main.py --rows 21 --cols 31  
+python main.py --loops 15 --seed 1  
+python main.py --treasure off       
 
- Randomized DFS (Recursive Backtracker). 
- Старт із випадкової камери; поки є невідвідані сусіди через 2 клітинки - випадково обираємо, 
- пробиваємо проміжну стіну й рухаємось; інакше відкат. Дає perfect maze (зв’язний, без циклів).
+# Algorithms for creating a maze
+Chamber grid (odd dimensions). 
+Passable “chambers” on odd indices, walls between them. Makes it easier to break through walls.
 
-Додавання циклів (--loops). 
-Післягенераційно прибираємо частину внутрішніх стін між двома коридорами, утворюючи альтернативні шляхи.
+Randomized DFS (Recursive Backtracker). 
+Start from a random cell; as long as there are unvisited neighbors within 2 cells, randomly select one, 
+break through the intermediate wall, and move; otherwise, roll back. Produces a perfect maze (connected, without cycles).
 
-Вибір входу/виходу (псевдо-діаметр). 
-Дві BFS по внутрішніх клітинках, прилеглих до межі: 
-знаходимо дві взаємно найдальші та відкриваємо відповідні бордер-позиції як E та X.
+Adding cycles (--loops). 
+Post-generation, we remove some of the internal walls between two corridors, creating alternative paths.
 
-# Алгоритми обходу
+Entrance/exit selection (pseudo-diameter). 
+Two BFS on the internal cells adjacent to the border: 
+we find the two most distant ones and open the corresponding border positions as E and X.
 
-BFS (звичайний). 
-Пошук будь-якого мінімального (за кроками) шляху між двома точками по клітинках != WALL. 
-Використовується для базового шляху та карт дистанцій.
+# Algorithms for traversing a graph
+
+BFS (standard).
+Search for any minimum (by steps) path between two points through cells != WALL.
+Used for the base path and distance maps.
 

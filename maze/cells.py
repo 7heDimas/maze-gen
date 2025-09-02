@@ -1,4 +1,4 @@
-# Символи клітинок
+# Cell symbols
 WALL = "#"
 ROAD = "."
 TRAP = "T"

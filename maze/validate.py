@@ -42,8 +42,8 @@ def solve_path_any(grid, start, goal):
 
 def solve_bfs_with_trap_limit(grid, start, goal, max_traps):
     """
-    BFS у просторі станів (r,c,t), де t — кількість пройдених пасток.
-    Дозволяє рух лише якщо t <= max_traps. max_traps=0 → повністю безпечний шлях.
+    BFS in the state space (r,c,t), where t is the number of traps passed.
+    Allows movement only if t <= max_traps. max_traps=0 → completely safe path.
     """
     if not start or not goal:
         return None
@@ -70,11 +70,11 @@ def solve_bfs_with_trap_limit(grid, start, goal, max_traps):
     return None
 
 def solve_bfs_with_traps(grid, start, goal):
-    """Сумісність: шлях з лімітом у 2 пастки."""
+    """Compatibility: path with a limit of 2 traps."""
     return solve_bfs_with_trap_limit(grid, start, goal, max_traps=2)
 
 def adj_road(grid, p):
-    """Повертає першу сусідню клітинку, що != WALL (для старту/фінішу BFS)."""
+    """Returns the first adjacent cell that is not a wall (for the start/end of BFS)."""
     r, c = p
     for dr, dc in [(1,0),(-1,0),(0,1),(0,-1)]:
         nr, nc = r + dr, c + dc

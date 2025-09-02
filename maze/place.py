@@ -61,15 +61,15 @@ def place_traps_safely(
     rows,
     cols,
     attempts: int = 50,
-    require_safe_path: bool = True,   # <-- ВАЖЛИВО: новий параметр
+    require_safe_path: bool = True,
 ):
     """
-    Розставляє 0..5 пасток (≈1 на 100 клітин, але ≤5) так, щоб:
-      - якщо require_safe_path=True → існував ХОЧА Б ОДИН шлях E→X БЕЗ пасток (0),
-      - інакше → існував шлях із лімітом до 2 пасток.
-    Ставимо пастки поза базовим шляхом; на базовому:
-      - якщо require_safe_path=True → 0 пасток,
-      - інакше → ≤2 пасток.
+    Places 0..5 traps (≈1 per 100 cells, but ≤5) so that:
+      - if require_safe_path=True → there is AT LEAST ONE path E→X WITHOUT traps (0),
+      - otherwise → there is a path with a limit of up to 2 traps.
+    We place traps outside the base path; on the base path:
+      - if require_safe_path=True → 0 traps,
+      - otherwise → ≤2 traps.
     """
     R, C = len(grid), len(grid[0])
     max_traps_auto = min(5, (rows * cols) // 100)
@@ -85,7 +85,7 @@ def place_traps_safely(
 
     for k in range(max_traps_auto, -1, -1):
         for _ in range(attempts):
-            # прибрати попередні пастки
+            # remove previous traps
             for r in range(R):
                 for c in range(C):
                     if grid[r][c] == TRAP:
@@ -101,11 +101,11 @@ def place_traps_safely(
             on_path  = [p for p in roads if p in base_path_set]
 
             traps, need = [], k
-            # 1) максимум поза шляхом
+            # 1) maximum off the road
             if off_path:
                 take = min(len(off_path), need)
                 traps.extend(rng.sample(off_path, take)); need -= take
-            # 2) на базовому шляху — 0 або ≤2
+            # 2) on the baseline path — 0 or ≤2
             if need > 0 and on_path:
                 take_on_cap = 0 if require_safe_path else 2
                 take_on = min(len(on_path), min(need, take_on_cap))
@@ -120,7 +120,7 @@ def place_traps_safely(
             if ok:
                 return traps
 
-    # запасний варіант: без пасток
+    # alternative: without traps
     for r in range(R):
         for c in range(C):
             if grid[r][c] == TRAP:
@@ -128,7 +128,7 @@ def place_traps_safely(
     return []
 
 def place_treasure(grid, entrance, exit_, rng, treasure_prob: float = 0.5):
-    """Ставитиме ≤1 скарб ($) на ROAD (не на E/X/T), гарантовано досяжний з урахуванням пасток."""
+    """Place ≤1 treasure ($) on ROAD (not on E/X/T), guaranteed to be reachable considering traps."""
     if rng.random() > treasure_prob:
         return None
     R, C = len(grid), len(grid[0])

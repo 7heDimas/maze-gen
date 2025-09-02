@@ -6,8 +6,8 @@ def _make_odd(n: int) -> int:
 
 def carve_maze(rows: int, cols: int, rng: random.Random):
     """
-    Randomized DFS (recursive backtracker) у решітці «камер».
-    Повертає сітку rows x cols (внутрішньо обрізаємо до непарних).
+    Randomized DFS (recursive backtracker) in the “chamber” grid.
+    Returns a grid of rows x cols (internally truncated to odd numbers).
     """
     rows = _make_odd(rows)
     cols = _make_odd(cols)
@@ -41,8 +41,8 @@ def carve_maze(rows: int, cols: int, rng: random.Random):
 
 def add_loops(grid, rng: random.Random, percent: int = 0):
     """
-    Прибирає частину внутрішніх стін між двома коридорами, утворюючи цикли.
-    percent: 0..100 (% від кандидатних стін). 0 — не чіпаємо (єдиний шлях).
+    Removes part of the internal walls between two corridors, forming cycles.
+    percent: 0..100 (% of candidate walls). 0 — do not touch (the only path).
     """
     if percent <= 0:
         return

@@ -8,7 +8,7 @@ def parse_args():
     p.add_argument("--no-path", action="store_true", help="Do not draw the solution path")
     p.add_argument("--treasure-prob", type=float, default=0.5,
                    help="Probability to place treasure (0..1)")
-    # Нове: створення циклів (декілька шляхів)
+    # creating cycles (several ways)
     p.add_argument("--loops", type=int, default=0,
                    help="Percent of interior walls to remove to add loops (0..100). 0 keeps a unique path.")
     return p.parse_args()
